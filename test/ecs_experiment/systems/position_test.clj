@@ -5,7 +5,7 @@
             [ecs-experiment.state :as state]
             [ecs-experiment.systems.position :as position-s]))
 
-(def entity-id 12)
+(def entity-id "test-entity")
 
 (def base-state
   {:entities {entity-id {:entity-id entity-id,

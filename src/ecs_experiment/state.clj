@@ -7,7 +7,7 @@
 ;; try it out.
 
 (def Entity
-  {:entity-id s/Int
+  {:entity-id s/Str
    :components {s/Keyword cs/Component}})
 
 (s/defn assoc-component :- Entity
@@ -16,30 +16,30 @@
   (assoc-in entity [:components component-key] component))
 
 (def State
-  {:entities {s/Int Entity}
+  {:entities {s/Str Entity}
    :systems [s/Keyword]})
 
 (s/defn get-component-by-entity-id :- cs/Component
   [state :- State
-   entity-id :- s/Int
+   entity-id :- s/Str
    component-key :- s/Keyword]
   (get-in state [:entities entity-id]))
 
 (s/defn get-component-data-by-entity-id :- s/Any
   [state :- State
-   entity-id :- s/Int
+   entity-id :- s/Str
    component-key :- s/Keyword]
   (get-in state [:entities entity-id :components component-key :data]))
 
 (s/defn assoc-component-by-entity-id :- State
   [state :- State
-   entity-id :- s/Int
+   entity-id :- s/Str
    {:keys [component-key] :as component} :- cs/Component]
   (assoc-in state [:entities entity-id :components component-key] component))
 
 (s/defn dissoc-component-from-entity :- State
   [state :- State
-   entity-id :- s/Int
+   entity-id :- s/Str
    component-key :- s/Keyword]
   (update-in state [:entities entity-id :components] dissoc component-key))
 
