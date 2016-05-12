@@ -5,12 +5,15 @@
             [ecs-experiment.components.velocity :as velocity-c]
             [ecs-experiment.state :as state]
             [ecs-experiment.systems.position :as position-s]
+            [ecs-experiment.systems.player-input :as player-input-s]
             [quil.core :as q]
             [schema.core :as s]))
 
 (s/set-fn-validation! true)
 
 ;; ############################### TEST DRAWING ################################
+
+(def input-state (atom #{}))
 
 (def test-state (atom nil))
 
@@ -34,11 +37,17 @@
 (def images (atom {}))
 
 (def test-position-system
-  (position-s/create-position-system {}))
+  (position-s/create-position-system nil))
+
+(def test-input-system
+  (player-input-s/create-player-input-system input-state))
 
 (defn- run-state []
   (dotimes [_ 50]
-    (reset! test-state (test-position-system @test-state))
+    (reset! test-state
+            (-> @test-state
+                test-input-system
+                test-position-system))
     (Thread/sleep 32)))
 
 (defn setup []
@@ -46,6 +55,9 @@
   (q/frame-rate 60)
   (q/background 200)
   (swap! images assoc :dreadnought (q/load-image "Dreadnought_icon.png")))
+
+(defn handle-keypress []
+  (swap! input-state conj (q/key-as-keyword)))
 
 (defn draw-state []
   (when @exit?
@@ -67,7 +79,8 @@
     :title "Random Red/Purple Circles"
     :setup setup
     :draw draw-state
-    :size [640 480]))
+    :size [640 480]
+    :key-pressed handle-keypress))
 
 (defn example-run-and-draw []
   (reset-state!)
