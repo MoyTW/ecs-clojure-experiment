@@ -1,5 +1,6 @@
 (ns ecs-experiment.core
-  (:require [ecs-experiment.components.position :as position-c]
+  (:require [ecs-experiment.components.heading :as heading-c]
+            [ecs-experiment.components.position :as position-c]
             [ecs-experiment.components.velocity :as velocity-c]
             [ecs-experiment.state :as state]
             [ecs-experiment.systems.position :as position-s]
@@ -14,7 +15,8 @@
   (atom (-> (state/create-empty-state)
             (state/create-and-assoc-entity
              [(velocity-c/create-velocity-component 3 1)
-              (position-c/create-position-component 10 10)]))))
+              (position-c/create-position-component 10 10)
+              (heading-c/create-heading-component 150)]))))
 
 (def exit? (atom false))
 
