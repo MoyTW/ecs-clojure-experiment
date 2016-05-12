@@ -15,8 +15,10 @@
   (atom (-> (state/create-empty-state)
             (state/create-and-assoc-entity
              [(velocity-c/create-velocity-component 3 1)
-              (position-c/create-position-component 10 10)
-              (heading-c/create-heading-component 150)]))))
+              (position-c/create-position-component 100 100)
+              (heading-c/create-heading-component 90)]))))
+
+(def images (atom {}))
 
 (def exit? (atom false))
 
@@ -26,23 +28,28 @@
 (defn- run-state []
   (dotimes [_ 50]
     (reset! test-state (test-position-system @test-state))
-    (Thread/sleep 100)))
+    (Thread/sleep 32)))
 
 (defn setup []
-  (q/frame-rate 10)
-  (q/background 200))
+  (q/image-mode :center)
+  (q/frame-rate 60)
+  (q/background 200)
+  (swap! images assoc :dreadnought (q/load-image "Dreadnought_icon.png")))
 
 (defn draw-state []
   (when @exit?
     (q/exit))
 
-  (q/stroke (q/random 255) (q/random 50) (q/random 255))
-  (q/stroke-weight (q/random 10))
-  (q/fill (q/random 255))
+  (q/background 0)
 
   (doseq [e (vals (:entities @test-state))]
     (when-let [pos (state/get-component-data e :position)]
-      (q/ellipse (first pos) (second pos) 15 15))))
+      (q/push-matrix)
+      (q/translate (first pos) (second pos))
+      (when-let [heading (state/get-component-data e :heading)]
+        (q/rotate (q/radians heading)))
+      (q/image (:dreadnought @images) 0 0)
+      (q/pop-matrix))))
 
 (defn example-window []
   (q/defsketch example
