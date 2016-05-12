@@ -8,21 +8,6 @@
 
 (s/set-fn-validation! true)
 
-(def test-state
-  (-> (state/create-empty-state)
-      (state/create-and-assoc-entity
-       [(velocity-c/create-velocity-component 3 1)
-        (position-c/create-position-component 10 10)])))
-
-(def entity-id (first (state/get-entity-ids test-state)))
-
-#_(deftest sums-velocity-and-position
-    (let [position-system (position-s/create-position-system nil)
-          next-state (position-system test-state)]
-      (is (= [13 11]
-             (state/get-component-data-by-entity-id
-              next-state entity-id :position)))))
-
 ;; ############################### TEST DRAWING ################################
 
 (def test-state
@@ -30,6 +15,8 @@
             (state/create-and-assoc-entity
              [(velocity-c/create-velocity-component 3 1)
               (position-c/create-position-component 10 10)]))))
+
+(def exit? (atom false))
 
 (def test-position-system
   (position-s/create-position-system {}))
@@ -44,6 +31,9 @@
   (q/background 200))
 
 (defn draw-state []
+  (when @exit?
+    (q/exit))
+
   (q/stroke (q/random 255) (q/random 50) (q/random 255))
   (q/stroke-weight (q/random 10))
   (q/fill (q/random 255))
@@ -62,7 +52,7 @@
 (defn example-run-and-draw []
   (example-window)
   (run-state)
-  (q/exit)) ;; This NPEs actually. Huh! Oh well.
+  (reset! exit? true))
 
 (defn -main
   "I don't do a whole lot ... yet."
