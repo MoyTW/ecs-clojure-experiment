@@ -16,7 +16,7 @@
             (state/create-and-assoc-entity
              [(velocity-c/create-velocity-component 3 1)
               (position-c/create-position-component 100 100)
-              (heading-c/create-heading-component 90)]))))
+              (heading-c/create-heading-component 45)]))))
 
 (def images (atom {}))
 
@@ -46,7 +46,7 @@
     (when-let [pos (state/get-component-data e :position)]
       (q/push-matrix)
       (q/translate (first pos) (second pos))
-      (when-let [heading (state/get-component-data e :heading)]
+      (when-let [heading (+ 180 (state/get-component-data e :heading))]
         (q/rotate (q/radians heading)))
       (q/image (:dreadnought @images) 0 0)
       (q/pop-matrix))))
