@@ -1,5 +1,6 @@
 (ns ecs-experiment.core
   (:require [ecs-experiment.components.heading :as heading-c]
+            [ecs-experiment.components.player :as player-c]
             [ecs-experiment.components.position :as position-c]
             [ecs-experiment.components.velocity :as velocity-c]
             [ecs-experiment.state :as state]
@@ -11,16 +12,26 @@
 
 ;; ############################### TEST DRAWING ################################
 
-(def test-state
-  (atom (-> (state/create-empty-state)
-            (state/create-and-assoc-entity
-             [(velocity-c/create-velocity-component 3 1)
-              (position-c/create-position-component 100 100)
-              (heading-c/create-heading-component 45)]))))
-
-(def images (atom {}))
+(def test-state (atom nil))
 
 (def exit? (atom false))
+
+(defn- reset-state! []
+  (reset! input-state #{})
+  (reset! test-state
+          (-> (state/create-empty-state)
+              (state/create-and-assoc-entity
+               [(player-c/create-player-component)
+                (velocity-c/create-velocity-component 3 1)
+                (position-c/create-position-component 100 100)
+                (heading-c/create-heading-component 45)])
+              (state/create-and-assoc-entity
+               [(velocity-c/create-velocity-component -3 1)
+                (position-c/create-position-component 400 200)
+                (heading-c/create-heading-component 273)])))
+  (reset! exit? false))
+
+(def images (atom {}))
 
 (def test-position-system
   (position-s/create-position-system {}))
@@ -59,6 +70,7 @@
     :size [640 480]))
 
 (defn example-run-and-draw []
+  (reset-state!)
   (example-window)
   (run-state)
   (reset! exit? true))

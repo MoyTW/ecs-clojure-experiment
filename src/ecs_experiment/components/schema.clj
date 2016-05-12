@@ -5,6 +5,9 @@
   {:component-key s/Keyword
    s/Keyword s/Any})
 
+(def PlayerComponent
+  {:component-key (s/eq :player)})
+
 (def PositionComponent
   {:component-key (s/eq :position)
    :data [(s/one s/Num "x") (s/one s/Num "y")]})
