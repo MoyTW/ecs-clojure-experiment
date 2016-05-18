@@ -6,19 +6,19 @@
             [ecs-experiment.utils :as utils]
             [schema.core :as s]))
 
-(def command-mapping
+(def ^:private command-mapping
   {:left :turn-left
    :a :turn-left
    :right :turn-right
    :d :turn-right})
 
-(s/defn input->commands :- #{cs/Command}
+(s/defn ^:private input->commands :- #{cs/Command}
   [input :- #{s/Keyword}]
   (->> (map command-mapping input)
        (remove nil?)
        (into #{})))
 
-(s/defn update-player-commands :- state/Entity
+(s/defn ^:private update-player-commands :- state/Entity
   [input-commands :- #{s/Keyword} entity :- state/Entity]
   (if (and (state/has-component? entity :player)
            (state/has-component? entity :commands))
