@@ -5,6 +5,7 @@
             [ecs-experiment.components.position :as position-c]
             [ecs-experiment.components.velocity :as velocity-c]
             [ecs-experiment.state :as state]
+            [ecs-experiment.systems.helm :as helm-s]
             [ecs-experiment.systems.position :as position-s]
             [ecs-experiment.systems.player-input :as player-input-s]
             [quil.core :as q]
@@ -45,12 +46,16 @@
 (def test-input-system
   (player-input-s/create-player-input-system input-state))
 
+(def test-helm-system
+  (helm-s/create-helm-system nil))
+
 (defn- run-state []
   (dotimes [_ 50]
     (reset! test-state
             (-> @test-state
                 test-input-system
-                test-position-system))
+                test-position-system
+                test-helm-system))
     (Thread/sleep 32)))
 
 (defn setup []

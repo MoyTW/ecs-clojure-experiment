@@ -5,4 +5,4 @@
 (s/defn create-heading-component :- cs/HeadingComponent
   [degrees :- s/Num]
   {:component-key :heading
-   :data degrees})
+   :data (mod degrees 360)})
