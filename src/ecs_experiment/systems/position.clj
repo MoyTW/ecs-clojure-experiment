@@ -9,8 +9,10 @@
   [entity :- state/Entity]
   (let [[vx vy] (state/get-component-data entity :velocity)
         [px py] (state/get-component-data entity :position)]
-    (->> (position-s/create-position-component (+ px vx) (+ py vy))
-         (state/assoc-component entity))))
+    (if (and vx px)
+      (->> (position-s/create-position-component (+ px vx) (+ py vy))
+           (state/assoc-component entity))
+      entity)))
 
 (s/defn ^:private position-system-fn :- state/State
   [state :- state/State]

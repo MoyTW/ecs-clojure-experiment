@@ -23,6 +23,7 @@
   (reset! input-state #{})
   (reset! test-state
           (-> (state/create-empty-state)
+              (state/create-and-assoc-entity [])
               (state/create-and-assoc-entity
                [(player-c/create-player-component)
                 (velocity-c/create-velocity-component 3 1)
