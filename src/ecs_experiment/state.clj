@@ -70,6 +70,11 @@
    component-key :- s/Keyword]
   (update-in state [:entities entity-id :components] dissoc component-key))
 
+(s/defn has-component? :- s/Any
+  [entity :- Entity
+   component-key :- s/Keyword]
+  (get-in entity [:components component-key]))
+
 (s/defn get-component-data :- s/Any
   [entity :- Entity
    component-key :- s/Keyword]

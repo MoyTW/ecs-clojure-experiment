@@ -1,5 +1,6 @@
 (ns ecs-experiment.core
-  (:require [ecs-experiment.components.heading :as heading-c]
+  (:require [ecs-experiment.components.commands :as commands-c]
+            [ecs-experiment.components.heading :as heading-c]
             [ecs-experiment.components.player :as player-c]
             [ecs-experiment.components.position :as position-c]
             [ecs-experiment.components.velocity :as velocity-c]
@@ -25,7 +26,8 @@
           (-> (state/create-empty-state)
               (state/create-and-assoc-entity [])
               (state/create-and-assoc-entity
-               [(player-c/create-player-component)
+               [(commands-c/create-commands-component #{})
+                (player-c/create-player-component)
                 (velocity-c/create-velocity-component 3 1)
                 (position-c/create-position-component 100 100)
                 (heading-c/create-heading-component 45)])
