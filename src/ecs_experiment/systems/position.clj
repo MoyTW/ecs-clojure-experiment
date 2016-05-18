@@ -1,5 +1,5 @@
 (ns ecs-experiment.systems.position
-  (:require [ecs-experiment.components.position :as position-s]
+  (:require [ecs-experiment.components.position :as position-c]
             [ecs-experiment.components.schema :as cs]
             [ecs-experiment.state :as state]
             [ecs-experiment.utils :as utils]
@@ -10,7 +10,7 @@
   (let [[vx vy] (state/get-component-data entity :velocity)
         [px py] (state/get-component-data entity :position)]
     (if (and vx px)
-      (->> (position-s/create-position-component (+ px vx) (+ py vy))
+      (->> (position-c/create-position-component (+ px vx) (+ py vy))
            (state/assoc-component entity))
       entity)))
 
