@@ -22,3 +22,10 @@
 (def HeadingComponent
   {:component-key (s/eq :heading)
    :data (s/constrained s/Num degrees-in-360)})
+
+(def Command
+  (s/enum :turn-left :turn-right))
+
+(def CommandsComponent
+  {:component-key (s/eq :commands)
+   :data #{Command}})
