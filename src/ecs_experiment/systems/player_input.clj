@@ -39,6 +39,7 @@
       new-state)
     state))
 
-(s/defn create-player-input-system :- clojure.lang.IFn
+(s/defn create-player-input-system :- state/GameSystem
   [input-state :- (s/atom #{s/Keyword})]
-  #(input-system-fn input-state %))
+  {:system-key :player-input
+   :system-fn #(input-system-fn input-state %)})

@@ -22,14 +22,26 @@
                 :components {}}]
     (reduce assoc-component entity components)))
 
+(def GameSystem
+  {:system-key s/Keyword
+   :system-fn clojure.lang.IFn})
+
 (def State
   {:entities {s/Str Entity}
-   :systems [s/Keyword]})
+   :systems [GameSystem]})
 
 (s/defn create-empty-state :- State
   []
   {:entities {},
    :systems []})
+
+(s/defn add-system :- State
+  [state :- State system :- GameSystem]
+  (update-in state [:systems] conj system))
+
+(s/defn get-system-fns :- [clojure.lang.IFn]
+  [state :- State]
+  (map :system-fn (:systems state)))
 
 (s/defn get-entity-ids :- [s/Str]
   [state :- State]

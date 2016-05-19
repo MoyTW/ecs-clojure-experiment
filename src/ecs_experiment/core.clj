@@ -25,6 +25,7 @@
   (reset! input-state #{})
   (reset! test-state
           (-> (state/create-empty-state)
+              ;; Add entities
               (state/create-and-assoc-entity [])
               (state/create-and-assoc-entity
                [(commands-c/create-commands-component #{})
@@ -35,27 +36,23 @@
               (state/create-and-assoc-entity
                [(velocity-c/create-velocity-component -3 1)
                 (position-c/create-position-component 400 200)
-                (heading-c/create-heading-component 273)])))
+                (heading-c/create-heading-component 273)])
+              ;; Add systems
+              (state/add-system (player-input-s/create-player-input-system
+                                 input-state))
+              (state/add-system (helm-s/create-helm-system nil))
+              (state/add-system (position-s/create-position-system nil))))
   (reset! exit? false))
 
 (def images (atom {}))
 
-(def test-position-system
-  (position-s/create-position-system nil))
-
-(def test-input-system
-  (player-input-s/create-player-input-system input-state))
-
-(def test-helm-system
-  (helm-s/create-helm-system nil))
+(s/defn run-systems :- state/State
+  [state :- state/State]
+  (reduce #(%2 %1) state (state/get-system-fns state)))
 
 (defn- run-state []
   (dotimes [_ 50]
-    (reset! test-state
-            (-> @test-state
-                test-input-system
-                test-position-system
-                test-helm-system))
+    (reset! test-state (run-systems @test-state))
     (Thread/sleep 32)))
 
 (defn setup []

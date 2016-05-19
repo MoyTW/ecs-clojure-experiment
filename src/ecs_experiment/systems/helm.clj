@@ -35,6 +35,7 @@
        (utils/map-values update-helm)
        (assoc state :entities)))
 
-(s/defn create-helm-system :- clojure.lang.IFn
+(s/defn create-helm-system :- state/GameSystem
   [_]
-  helm-system-fn)
+  {:system-key :helm
+   :system-fn helm-system-fn})

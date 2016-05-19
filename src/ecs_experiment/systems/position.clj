@@ -20,6 +20,7 @@
        (utils/map-values update-position)
        (assoc state :entities)))
 
-(s/defn create-position-system :- clojure.lang.IFn
+(s/defn create-position-system :- state/GameSystem
   [_]
-  position-system-fn)
+  {:system-key :postion
+   :system-fn position-system-fn})
