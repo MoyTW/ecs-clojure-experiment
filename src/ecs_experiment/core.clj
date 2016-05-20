@@ -51,7 +51,7 @@
   (reduce #(%2 %1) state (state/get-system-fns state)))
 
 (defn- run-state []
-  (dotimes [_ 50]
+  (while (not @exit?)
     (reset! test-state (run-systems @test-state))
     (Thread/sleep 32)))
 
@@ -62,12 +62,11 @@
   (swap! images assoc :dreadnought (q/load-image "Dreadnought_icon.png")))
 
 (defn handle-keypress []
+  (when (= 27 (q/key-code))
+    (reset! exit? true))
   (swap! input-state conj (q/key-as-keyword)))
 
 (defn draw-state []
-  (when @exit?
-    (q/exit))
-
   (q/background 0)
 
   (doseq [e (vals (:entities @test-state))]
@@ -90,8 +89,7 @@
 (defn example-run-and-draw []
   (reset-state!)
   (example-window)
-  (run-state)
-  (reset! exit? true))
+  (run-state))
 
 (defn -main
   "I don't do a whole lot ... yet."
