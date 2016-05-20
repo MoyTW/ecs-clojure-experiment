@@ -15,6 +15,9 @@
 
 ;; ############################### TEST DRAWING ################################
 
+(def width 640)
+(def height 480)
+
 (def input-state (atom #{}))
 
 (def test-state (atom nil))
@@ -41,7 +44,8 @@
               (state/add-system (player-input-s/create-player-input-system
                                  input-state))
               (state/add-system (helm-s/create-helm-system nil))
-              (state/add-system (position-s/create-position-system nil))))
+              (state/add-system (position-s/create-position-system
+                                 {:max-x width :max-y height}))))
   (reset! exit? false))
 
 (def images (atom {}))
@@ -83,7 +87,7 @@
     :title "Random Red/Purple Circles"
     :setup setup
     :draw draw-state
-    :size [640 480]
+    :size [width height]
     :key-pressed handle-keypress))
 
 (defn example-run-and-draw []
