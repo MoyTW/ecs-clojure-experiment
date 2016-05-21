@@ -7,8 +7,12 @@
             [schema.core :as s]))
 
 (def ^:private command-mapping
-  {:left :turn-left
+  {:up :forward
+   :w :forward
+   :left :turn-left
    :a :turn-left
+   :s :stop
+   :down :stop
    :right :turn-right
    :d :turn-right})
 

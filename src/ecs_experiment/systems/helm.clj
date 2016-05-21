@@ -6,6 +6,11 @@
             [ecs-experiment.utils :as utils]
             [schema.core :as s]))
 
+(s/defn ^:private forward :- state/Entity
+  [entity :- state/Entity]
+  (prn :FWD)
+  entity)
+
 (s/defn ^:private turn :- state/Entity
   [degrees :- s/Num entity :- state/Entity]
   (if-let [old-degrees (state/get-component-data entity :heading)]
@@ -13,9 +18,16 @@
          (state/assoc-component entity))
     entity))
 
+(s/defn ^:private stop :- state/Entity
+  [entity :- state/Entity]
+  (prn :STP)
+  entity)
+
 (def ^:private commands->fns
-  {:turn-left #(turn -1 %)
-   :turn-right #(turn 1 %)})
+  {:forward forward
+   :turn-left #(turn -1 %)
+   :turn-right #(turn 1 %)
+   :stop stop})
 
 ;; This is kinda clunky! Aesthetically unpleasing!
 (s/defn ^:private update-helm :- state/Entity
